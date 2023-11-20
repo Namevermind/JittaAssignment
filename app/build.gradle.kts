@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "android.jitta.assignment"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "android.jitta.assignment"
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
