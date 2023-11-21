@@ -8,6 +8,6 @@ class GetCountryListUseCase(
     private val repository: MainRepository
 ) {
     suspend operator fun invoke(): ApiResponse<List<Country>> {
-        return repository.getCountrys()
+        return repository.getCountry()
     }
 }

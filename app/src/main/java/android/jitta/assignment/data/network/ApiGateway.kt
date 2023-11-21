@@ -1,10 +1,12 @@
 package android.jitta.assignment.data.network
 
 import android.jitta.assignment.AvailableCountryQuery
+import android.jitta.assignment.JittaRankingQuery
 import android.jitta.assignment.ListSectorTypeQuery
 import android.jitta.assignment.base.utils.ApiException
 import android.jitta.assignment.base.utils.ApiResponse
 import android.jitta.assignment.data.entities.Country
+import android.jitta.assignment.data.entities.RankingItem
 import android.jitta.assignment.data.entities.Sector
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Error
@@ -12,6 +14,7 @@ import com.apollographql.apollo3.api.Error
 interface ApiGateway {
     suspend fun getCountryList(): ApiResponse<List<Country>>
     suspend fun getSectorList(): ApiResponse<List<Sector>>
+    suspend fun getRankingList(market: String, page: Int): ApiResponse<List<RankingItem>>
 }
 
 class ApiGatewayImpl(
@@ -48,6 +51,29 @@ class ApiGatewayImpl(
                 name = it?.name.orEmpty()
             )
         })
+    }
+
+    override suspend fun getRankingList(
+        market: String,
+        page: Int
+    ): ApiResponse<List<RankingItem>> {
+        val response = apolloClient.query(JittaRankingQuery(market = market, page = page)).execute()
+        if (response.hasErrors()) return response.errors?.first().toApiException()
+
+        val result = response.data?.jittaRanking
+        val count = result?.count ?: 0
+        val data = result?.data ?: emptyList()
+        return ApiResponse.Success(data.map { item ->
+            RankingItem(
+                id = item?.id.orEmpty(),
+                symbol = item?.symbol.orEmpty(),
+                title = item?.title.orEmpty(),
+                rank = item?.rank ?: 0,
+                count = count,
+                sectorId = item?.sector?.id.orEmpty()
+            )
+        })
+
     }
 }
 
