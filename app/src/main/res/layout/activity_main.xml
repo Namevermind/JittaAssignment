@@ -64,7 +64,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="?attr/actionBarSize"
-                            android:layout_marginBottom="48dp"
+                            android:layout_marginBottom="52dp"
                             android:orientation="vertical"
                             android:padding="16dp"
                             android:scaleType="centerCrop"
@@ -91,7 +91,7 @@
                             android:id="@+id/toolbar"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="?attr/actionBarSize"
+                            android:layout_marginBottom="52dp"
                             android:background="?attr/colorPrimary"
                             app:layout_collapseMode="pin">
 
@@ -106,7 +106,7 @@
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="?attr/actionBarSize"
+                            android:layout_height="52dp"
                             android:layout_gravity="bottom"
                             android:layout_marginTop="?attr/actionBarSize"
                             app:layout_collapseMode="pin">
@@ -119,7 +119,7 @@
                                 app:layout_constraintGuide_percent="0.5" />
 
                             <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/constraintLayout"
+                                android:id="@+id/btn_market_filter"
                                 android:layout_width="0dp"
                                 android:layout_height="36dp"
                                 android:layout_marginVertical="8dp"

@@ -19,7 +19,9 @@ class MainViewModel(
     private val getRankingListUseCase: GetRankingListUseCase
 ) : ViewModel() {
 
-    var currentPage = 0
+    var isHasMoreRankingItem = true
+    var currentMarketType = "TH"
+    private var currentPage = 0
 
     val countryList = MutableLiveData<List<Country>>()
     val sectorList = MutableLiveData<List<Sector>>()
@@ -27,7 +29,6 @@ class MainViewModel(
 
     val onLoadingInitSuccess = MutableLiveEvent<Unit>()
 
-    val currentMarketType = MutableLiveData<String>()
     val marketTypeDisplay = MutableLiveData<String>()
     val sectorTypeDisplay = MutableLiveData<String>()
 
@@ -40,11 +41,12 @@ class MainViewModel(
             // setup init value
             countryList.value?.find { it.code == "TH" }?.also {
                 marketTypeDisplay.value = it.name
-                currentMarketType.value = it.code
+                currentMarketType = it.code
             }
             sectorTypeDisplay.value = "All"
 
-            rankingList.value = getRankingList(marketId = currentMarketType.value ?: "TH", page = 0)
+            val newRankingItems = getRankingList(marketId = currentMarketType, page = currentPage)
+            updateRankList(newRankingItems)
 
             onLoadingInitSuccess.call()
         }
@@ -82,4 +84,37 @@ class MainViewModel(
         }
     }
 
+    fun loadMoreRankingList() {
+        currentPage++
+        viewModelScope.launch {
+            val newRankingItems = getRankingList(marketId = currentMarketType, page = currentPage)
+            updateRankList(newRankingItems)
+        }
+    }
+
+    fun changeMarketRankingList(marketCode: String) {
+        currentMarketType = marketCode
+        marketTypeDisplay.value = countryList.value?.find { it.code == marketCode }?.name.orEmpty()
+
+        viewModelScope.launch {
+            resetPage()
+            val newRankingItems = getRankingList(marketId = currentMarketType, page = currentPage)
+            updateRankList(newRankingItems)
+        }
+
+    }
+
+    private fun resetPage() {
+        isHasMoreRankingItem = true
+        currentPage = 0
+        rankingList.value = listOf()
+    }
+
+    private fun updateRankList(newRankingItems: List<RankingItem>) {
+        isHasMoreRankingItem = newRankingItems.size >= 30
+        val updateList = mutableListOf<RankingItem>()
+        rankingList.value?.let { updateList.addAll(it) }
+        updateList.addAll(newRankingItems)
+        rankingList.value = updateList
+    }
 }
