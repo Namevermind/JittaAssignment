@@ -1,0 +1,1732 @@
+type Query {
+  availableCountry: [StockCountry]
+
+  test: String
+
+  stock(id: String, stockId: Int): Stock
+
+  interdays(stockId: Int, startDate: String, endDate: String, groupBy: GroupByEnum, filterBy: FilterInput): InterdayResult
+
+  listJittaSectorType: [Sector]
+
+  jittaRanking(filter: RankingInput): RankingResult
+
+  translateSummary(input: TranslateInput): TranslateResult
+
+  search(keyword: String, countries: [Country]): [SearchResult]
+
+  me: User
+
+  isAuthenticated: Boolean
+
+  following(filter: FollowingInput): FollowingData
+
+  listNotifications(limit: Int, page: Int): ListNotifications
+
+  wise(id: String, stockId: Int): [WiseData]
+
+  listPageGroup: [PageGroup]
+
+  page(id: String): PageInterface
+
+  getInvestingMixData: InvestingMixPage
+
+  getDemographicQuestions: DemographicQuestionList
+
+  getNextInvestingMixQuestion(input: NextInvestingMixQuestionInput): InvestingMixQuestion
+}
+
+type StockCountry {
+  code: String
+
+  name: String
+
+  displayExchange: [String]
+
+  flag: String
+}
+
+"""
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+"""
+scalar String
+
+"""
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+"""
+scalar Int
+
+type Stock {
+  checklist: Checklist
+
+  wise: [WiseData]
+
+  isFollowing: Boolean
+
+  stockId: Int!
+
+  title: String
+
+  jitta: JittaIntel
+
+  jittaRankScore: Float
+
+  factsheetPrice: FactsheetPrice
+
+  financial: Financial
+
+  factsheet(names: [String]): [Factsheet]
+
+  adr: Boolean
+
+  company: Company
+
+  createDate: DateTime
+
+  currency: String
+
+  exchange: String
+
+  index_membership: [String]
+
+  market: String
+
+  name: String
+
+  price_currency: String
+
+  ric: String
+
+  shortname: String
+
+  symbol: String
+
+  type: String
+
+  updateDate: DateTime
+
+  updatedFinancial: DateTime
+
+  split_logs: [Any]
+
+  alias: String
+
+  updatedFinancialComplete: DateTime
+
+  financial_summary: FinancialSummary
+
+  character: Character
+
+  localName: String
+
+  availableInfo: AvailableInfo
+
+  companyStatus: CompanyStatus
+
+  id: String
+
+  consensus: Consensus
+
+  updatedAt: DateTime
+
+  currency_sign: String
+
+  last_complete_statement_enddate: String
+
+  last_complete_statement_key: String
+
+  capitalIqId: String
+
+  bussiness_summary: BussinessSummary
+
+  summary: String
+
+  bussiness_type: String
+
+  industry: String
+
+  industryGroup: String
+
+  sector: Sector
+
+  status: String
+
+  fundamental: Fundamental
+
+  price: Price
+
+  recommendation: Recommendation
+
+  playlist: Playlist
+
+  loss_chance: LossChance
+
+  comparison: Comparison
+
+  primary_stock: Boolean
+
+  graph_price: GraphPrice
+
+  price_correlation: PriceCorrelation
+
+  industry_group: String
+
+  class_conversion_factor: Int
+
+  reportingTemplate: String
+
+  quarterValues(filterBy: FilterInput): [QuarterValues]
+
+  trade_statistics: QuarterValues
+
+  nativeName: String
+
+  alias_history: [String]
+
+  actual_exchange: String
+
+  funFact: String
+}
+
+type Checklist {
+  summary: ChecklistSummary
+
+  data: [ChecklistData]
+}
+
+type ChecklistSummary {
+  totalChecked: Int
+
+  total: Int
+}
+
+type ChecklistData {
+  name: String
+
+  isChecked: Boolean
+}
+
+"""
+The `Boolean` scalar type represents `true` or `false`.
+"""
+scalar Boolean
+
+type WiseData {
+  key: String
+
+  title: String
+
+  data: [WiseContent]
+}
+
+type WiseContent {
+  text: String
+
+  chart: [WiseChart]
+
+  table: WiseTable
+}
+
+type WiseChart {
+  key: String
+
+  name: String
+
+  data: [WiseChartData]
+}
+
+type WiseChartData {
+  year: String
+
+  value: String
+}
+
+type WiseTable {
+  title: String
+
+  columnHead: [String]
+
+  columns: [TableColumn]
+
+  footer: String
+}
+
+type TableColumn {
+  name: String
+
+  data: [String]
+}
+
+type JittaIntel {
+  monthlyPrice: Scope
+
+  score: Scope
+
+  lossChanceKey: Scope
+
+  factor: FactorScope
+
+  jittaRankScore: Scope
+
+  line: Scope
+
+  priceDiff: Scope
+
+  sign: SignScope
+
+  yearlyReturn: Scope
+
+  lastCompleteStatementKey: String
+}
+
+type Scope {
+  type: String
+
+  total: Int
+
+  first: ScopeItem
+
+  last: ScopeItem
+
+  values(filterBy: IntelFilter): [ScopeItem]
+}
+
+interface ScopeItem {
+  id: ID
+
+  year: Int
+
+  month: Int
+
+  quarter: Int
+
+  day: Int
+
+  value: Float
+}
+
+"""
+The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
+"""
+scalar ID
+
+"""
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).
+"""
+scalar Float
+
+input IntelFilter {
+  limit: Int
+
+  sort: SortEnum
+}
+
+enum SortEnum {
+  ASC
+
+  DESC
+}
+
+type FactorScope {
+  type: String
+
+  total: Int
+
+  first: FactorScopeItem
+
+  last: FactorScopeItem
+
+  values(filterBy: IntelFilter): [FactorScopeItem]
+}
+
+type FactorScopeItem {
+  id: ID
+
+  year: Int
+
+  month: Int
+
+  quarter: Int
+
+  day: Int
+
+  value: Factor
+}
+
+type Factor {
+  recent: FactorItem
+
+  growth: FactorItem
+
+  financial: FactorItem
+
+  return: FactorItem
+
+  management: FactorItem
+}
+
+type FactorItem {
+  name: String
+
+  level: FactorLevel
+
+  value: Float
+}
+
+enum FactorLevel {
+  HIGH
+
+  MEDIUM
+
+  LOW
+}
+
+type SignScope {
+  last: [IntelJittaSignLast]
+}
+
+type IntelJittaSignLast {
+  type: String
+
+  name: String
+
+  title: String
+
+  value: String
+
+  display: SignDisplay
+
+  raw: [SignRaw]
+}
+
+union SignDisplay = DisplayIPO|DisplayTable
+
+type DisplayIPO {
+  title: String
+
+  value: Int
+}
+
+type DisplayTable {
+  title: String
+
+  columnHead: [String]
+
+  columns: [TableColumn]
+
+  footer: String
+}
+
+interface SignRaw {
+  name: String
+}
+
+type FactsheetPrice {
+  data(filterBy: FilterInput): [Interday]
+
+  updatedAt: DateTime
+}
+
+input FilterInput {
+  limit: Int
+
+  sort: SortEnum
+}
+
+type Interday {
+  latest_price_timestamp: DateTime
+
+  timestamp: DateTime
+
+  open: Float
+
+  close: Float
+
+  high: Float
+
+  low: Float
+
+  volume: Float
+
+  market_cap: Float
+
+  datetime: DateTime
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+type Financial {
+  quarter(filterBy: FilterInput): [FinancialQuarter]
+
+  fiscal(filterBy: FilterInput): [FinancialFascal]
+
+  dividendHistory: [FinancialDividendHistory]
+
+  ratio: FinancialRatio
+}
+
+type FinancialQuarter {
+  id: String
+
+  quarter: Int
+
+  year: Int
+
+  source: String
+
+  end_date: String
+
+  currency: String
+
+  income: FinancialSheet
+
+  balance: FinancialSheet
+
+  cashflow: FinancialSheet
+}
+
+type FinancialSheet {
+  statement_date: String
+
+  period_length: Int
+
+  period_type: String
+
+  source: FinancialSheetSource
+
+  lineitem: [FinancialValue]
+}
+
+type FinancialSheetSource {
+  updated: DateTime
+
+  from: String
+}
+
+type FinancialValue {
+  id: String
+
+  name: String
+
+  value: Float
+}
+
+type FinancialFascal {
+  id: String
+
+  year: Int
+
+  source: String
+
+  end_date: String
+
+  currency: String
+
+  income: FinancialSheet
+
+  balance: FinancialSheet
+
+  cashflow: FinancialSheet
+
+  complete_financial_date: DateTime
+}
+
+type FinancialDividendHistory {
+  currency: String
+
+  adj_amount: Float
+
+  amount: Float
+
+  pay_date: DateTime
+
+  ex_date: DateTime
+}
+
+type FinancialRatio {
+  latest: FinancialSheet
+}
+
+type Factsheet {
+  name: String
+
+  fiscal(limit: Int): [FactsheetFiscalValue]
+
+  quarter(limit: Int): [FactsheetQuarterValue]
+}
+
+type FactsheetFiscalValue {
+  year: String
+
+  value: String
+}
+
+type FactsheetQuarterValue {
+  quarter: String
+
+  value: String
+}
+
+type Company {
+  ipo_date: DateTime
+
+  first_price_date: DateTime
+
+  incorporated_date: DateTime
+
+  officer: [Officer]
+
+  link: [CompanyLink]
+
+  address: CompanyAddress
+
+  phone: String
+
+  fax: String
+
+  foreignBuy: CompanyForeignBuy
+}
+
+type Officer {
+  title: String
+
+  firstName: String
+
+  lastName: String
+
+  age: String
+
+  yearBorn: Int
+
+  prefix: String
+
+  suffix: String
+
+  emailAddress: String
+}
+
+type CompanyLink {
+  _id: String
+
+  url: String
+
+  title: String
+}
+
+type CompanyAddress {
+  line1: String
+
+  line2: String
+
+  city: String
+
+  state: String
+
+  zipcode: String
+
+  country: String
+
+  contry_code: String
+}
+
+type CompanyForeignBuy {
+  buyVolume: Int
+
+  ownedPercentage: Float
+
+  availableRoom: Int
+
+  totalRoom: Int
+
+  tradableValue: Float
+
+  tradableVolume: Float
+}
+
+scalar Any
+
+type FinancialSummary {
+  updated: DateTime
+
+  context: String
+}
+
+type Character {
+  stability_trend: Int
+
+  stability: String
+}
+
+type AvailableInfo {
+  officers: Boolean
+
+  significantdevelopment: Boolean
+
+  estimates: Boolean
+
+  financials: Boolean
+
+  businessintelligence: Boolean
+}
+
+type CompanyStatus {
+  expectedipo: Boolean
+
+  publicstatus: Boolean
+
+  activestatus: Boolean
+}
+
+type Consensus {
+  fiscal: ConsensusPeriodic
+
+  quarter: ConsensusPeriodic
+}
+
+type ConsensusPeriodic {
+  revenue: [ConsensusValue]
+
+  nprofitrep: [ConsensusValue]
+}
+
+type ConsensusValue {
+  id: String
+
+  mean: Float
+
+  calendarYear: Int
+
+  calendarQuarter: Int
+
+  fiscalYear: Int
+
+  fiscalQuarter: Int
+
+  high: Float
+
+  low: Float
+
+  numofest: Int
+}
+
+type BussinessSummary {
+  content: String
+}
+
+type Sector {
+  id: String!
+
+  name: String
+}
+
+type Fundamental {
+  eps: Float
+
+  market_cap: Float
+
+  shares: Float
+
+  dividend_per_share: Float
+
+  pe: Float
+
+  dividend: Float
+
+  beta: Float
+
+  yield: Float
+}
+
+type Price {
+  yesterday: Interday
+
+  latest: Interday
+}
+
+type Recommendation {
+  other_sector: [String]
+
+  industry: [String]
+
+  related: [String]
+
+  sector: [String]
+
+  business_type: [String]
+}
+
+type Playlist {
+  updatedAt: DateTime
+
+  list: [PlayListValue]
+}
+
+type PlayListValue {
+  name: String
+
+  value: String
+}
+
+type LossChance {
+  last: Float
+
+  updatedAt: DateTime
+}
+
+type Comparison {
+  business_type: ComparisonValue
+
+  industry: ComparisonValue
+
+  sector: ComparisonValue
+
+  market: ComparisonValue
+}
+
+type ComparisonValue {
+  member: Int
+
+  avg_jitta_score: Float
+
+  avg_price_diff: Float
+
+  rank: Int
+}
+
+type GraphPrice {
+  graphs: [GraphPriceValue]
+
+  first_graph_period: String
+}
+
+type GraphPriceValue {
+  linePrice: Float
+
+  stockPrice: Float
+}
+
+type PriceCorrelation {
+  stock_id: String
+
+  corr: Float
+}
+
+type QuarterValues {
+  quarter: String
+
+  high_low_price: QuarterValuesHighLowPrice
+
+  average_values: [QuarterValueData]
+
+  average_prices: [QuarterValueData]
+
+  average_volumes: [QuarterValueData]
+
+  volume: [QuarterValueData]
+
+  price: QuarterValuesPrice
+}
+
+type QuarterValuesHighLowPrice {
+  low: HighLowPrice
+
+  high: HighLowPrice
+}
+
+type HighLowPrice {
+  price: Float
+
+  date: Date
+}
+
+"""
+A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar Date
+
+type QuarterValueData {
+  id: String
+
+  value: Float
+}
+
+type QuarterValuesPrice {
+  close: QuarterValuesPriceClose
+}
+
+type QuarterValuesPriceClose {
+  average: [QuarterValueData]
+
+  change: [QuarterValueData]
+
+  low: [QuarterValueData]
+
+  high: [QuarterValueData]
+
+  last: Float
+}
+
+enum GroupByEnum {
+  Month
+
+  Year
+}
+
+type InterdayResult {
+  count: Float
+
+  interdaysMonthly: [InterdayGroup]
+
+  interdaysYearly: [InterdayGroup]
+
+  interdays: [Interday]
+}
+
+type InterdayGroup {
+  low: Float
+
+  high: Float
+
+  timestamp: DateTime
+
+  averageVolume: Float
+
+  open: Float
+
+  close: Float
+}
+
+input RankingInput {
+  market: String!
+
+  sectors: [String]
+
+  page: Int
+
+  limit: Int
+}
+
+type RankingResult {
+  count: Int
+
+  data: [StockAlgoliaExplore]
+}
+
+type StockAlgoliaExplore {
+  stockId: Int!
+
+  jittaScore: Float
+
+  rank: Int
+
+  updatedAt: DateTime
+
+  id: String
+
+  nativeName: String
+
+  latestPriceDiff: PriceDiffItem
+
+  exchange: String
+
+  sector: Sector
+
+  industry: String
+
+  name: String
+
+  symbol: String
+
+  market: String
+
+  latestPrice: Float
+
+  graphs: [GraphPriceValue]
+
+  firstGraphqlPeriod: String
+
+  status: String
+
+  latestLossChance: Float
+
+  currency: String
+
+  jittaRankScore: Float
+
+  title: String
+}
+
+type PriceDiffItem implements ScopeItem {
+  id: ID
+
+  year: Int
+
+  month: Int
+
+  quarter: Int
+
+  day: Int
+
+  value: Float
+
+  type: String
+
+  percent: String
+}
+
+input TranslateInput {
+  text: String
+}
+
+type TranslateResult {
+  text: String
+}
+
+input Country {
+  name: String
+
+  weight: Float
+}
+
+type SearchResult {
+  symbol: String
+
+  name: String
+
+  localName: [String]
+
+  id: String
+
+  exchange: String
+
+  market: String
+
+  jitta_score: Float
+}
+
+type User {
+  userId: String
+
+  _id: String
+
+  name: String
+
+  picture: String
+
+  phoneNumber: String
+
+  emails: [UserEmail]
+
+  email: String
+
+  acl: Any
+
+  isNewUser: Boolean
+
+  setting: Setting
+
+  badge: Int
+}
+
+type UserEmail {
+  email: String
+
+  verify: Boolean
+}
+
+type Setting {
+  language: String
+
+  theme: String
+
+  defaultMarket: String
+
+  notifications: NotificationSetting
+}
+
+type NotificationSetting {
+  financialUpdate: Boolean
+}
+
+input FollowingInput {
+  page: Int
+
+  limit: Int
+}
+
+type FollowingData {
+  total: Int
+
+  list: [FollowingStockData]
+}
+
+type FollowingStockData {
+  stock: Stock
+
+  value: FollowingStockValue
+}
+
+type FollowingStockValue {
+  created: DateTime
+
+  status: String
+}
+
+type ListNotifications {
+  count: Int
+
+  notifications: [NotificationInterface]
+}
+
+interface NotificationInterface {
+  id: String!
+
+  title: String!
+
+  message: String!
+
+  read: Boolean
+
+  createdAt: DateTime
+}
+
+type PageGroup {
+  id: String
+
+  title: String
+
+  subTitle: String
+
+  pages: [PageInterface]
+}
+
+interface PageInterface {
+  id: String!
+
+  title: String!
+
+  subTitle: String
+
+  text: String
+
+  url: String
+
+  deepLinkUrl: String
+
+  coverImage: String
+}
+
+type InvestingMixPage implements PageInterface {
+  id: String!
+
+  title: String!
+
+  subTitle: String
+
+  text: String
+
+  url: String
+
+  deepLinkUrl: String
+
+  coverImage: String
+
+  stocks: [Stock]
+}
+
+type DemographicQuestionList {
+  questionList: [DemographicQuestion]
+}
+
+type DemographicQuestion {
+  id: Int
+
+  questionTitle: String
+
+  choice: [DemographicChoice]
+}
+
+type DemographicChoice {
+  id: Int
+
+  choiceTitle: String
+
+  image: String
+}
+
+input NextInvestingMixQuestionInput {
+  id: Int!
+
+  previousQuestionId: Int
+
+  choiceId: Int
+}
+
+type InvestingMixQuestion {
+  id: Int!
+
+  question: String!
+
+  choice: [InvestingMixChoice]!
+
+  type: String
+
+  isFirstQuestion: Boolean
+
+  isLastQuestion: Boolean
+
+  total: Int
+
+  description: String
+}
+
+type InvestingMixChoice {
+  id: Int!
+
+  title: String!
+
+  stockAlias: String
+
+  titleEmoji: String
+}
+
+type Mutation {
+  loginWithEmail(input: LoginWithEmailInput!): LoginResponse
+
+  loginWithFacebook(input: LoginWithFacebookInput!): LoginResponse
+
+  loginWithGoogle(input: LoginWithGoogleInput!): LoginResponse
+
+  loginWithApple(input: LoginWithAppleInput): LoginResponse
+
+  follow(alias: String, id: String, stockId: Int): Stock
+
+  unFollow(alias: String, id: String, stockId: Int): Stock
+
+  logout: Boolean
+
+  syncDevice(input: SyncDeviceInput): SyncDeviceResult
+
+  pushNoti(input: PushNotiInput): PushNotiResult
+
+  pushNotiFromUserId(input: PushNotiFromUserIdInput): PushNotiResult
+
+  syncSetting(input: SettingInput!): User
+
+  submitDemographic(input: [SubmitDemographicInput]): InvestingMixQuestion
+
+  submitAnswer(input: [SubmitAnswerInput]!): InvestingMixPage
+
+  clearBadge: Badge
+}
+
+input LoginWithEmailInput {
+  email: String!
+
+  password: String!
+}
+
+type LoginResponse {
+  data: LoginResponseData
+}
+
+type LoginResponseData {
+  userId: String
+
+  token: String
+}
+
+input LoginWithFacebookInput {
+  accessToken: String!
+}
+
+input LoginWithGoogleInput {
+  idToken: String!
+
+  accessToken: String!
+}
+
+input LoginWithAppleInput {
+  idToken: String
+
+  setting: SettingInput
+}
+
+input SettingInput {
+  language: String
+
+  theme: String
+
+  defaultMarket: String
+
+  notifications: NotificationInput
+}
+
+input NotificationInput {
+  financialUpdate: Boolean
+}
+
+input SyncDeviceInput {
+  deviceType: Int!
+
+  notiType: Int!
+
+  uuid: ID!
+
+  language: String
+
+  userId: ID
+}
+
+type SyncDeviceResult {
+  playerId: ID
+}
+
+input PushNotiInput {
+  playerIds: [String]!
+
+  template: String
+}
+
+type PushNotiResult {
+  success: Boolean
+}
+
+input PushNotiFromUserIdInput {
+  userIds: [String]!
+}
+
+input SubmitDemographicInput {
+  questionId: Int
+
+  choiceId: Int
+}
+
+input SubmitAnswerInput {
+  questionId: Int!
+
+  selectedChoiceId: Int!
+
+  stockAlias: String
+}
+
+type Badge {
+  badge: Int
+}
+
+"""
+A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations.
+"""
+type __Schema {
+  """
+  A list of all types supported by this server.
+  """
+  types: [__Type!]!
+
+  """
+  The type that query operations will be rooted at.
+  """
+  queryType: __Type!
+
+  """
+  If this server supports mutation, the type that mutation operations will be rooted at.
+  """
+  mutationType: __Type
+
+  """
+  If this server support subscription, the type that subscription operations will be rooted at.
+  """
+  subscriptionType: __Type
+
+  """
+  A list of all directives supported by this server.
+  """
+  directives: [__Directive!]!
+}
+
+"""
+The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
+
+Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name and description, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
+"""
+type __Type {
+  kind: __TypeKind!
+
+  name: String
+
+  description: String
+
+  fields(includeDeprecated: Boolean = false): [__Field!]
+
+  interfaces: [__Type!]
+
+  possibleTypes: [__Type!]
+
+  enumValues(includeDeprecated: Boolean = false): [__EnumValue!]
+
+  inputFields: [__InputValue!]
+
+  ofType: __Type
+}
+
+"""
+An enum describing what kind of type a given `__Type` is.
+"""
+enum __TypeKind {
+  """
+  Indicates this type is a scalar.
+  """
+  SCALAR
+
+  """
+  Indicates this type is an object. `fields` and `interfaces` are valid fields.
+  """
+  OBJECT
+
+  """
+  Indicates this type is an interface. `fields` and `possibleTypes` are valid fields.
+  """
+  INTERFACE
+
+  """
+  Indicates this type is a union. `possibleTypes` is a valid field.
+  """
+  UNION
+
+  """
+  Indicates this type is an enum. `enumValues` is a valid field.
+  """
+  ENUM
+
+  """
+  Indicates this type is an input object. `inputFields` is a valid field.
+  """
+  INPUT_OBJECT
+
+  """
+  Indicates this type is a list. `ofType` is a valid field.
+  """
+  LIST
+
+  """
+  Indicates this type is a non-null. `ofType` is a valid field.
+  """
+  NON_NULL
+}
+
+"""
+Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type.
+"""
+type __Field {
+  name: String!
+
+  description: String
+
+  args: [__InputValue!]!
+
+  type: __Type!
+
+  isDeprecated: Boolean!
+
+  deprecationReason: String
+}
+
+"""
+Arguments provided to Fields or Directives and the input fields of an InputObject are represented as Input Values which describe their type and optionally a default value.
+"""
+type __InputValue {
+  name: String!
+
+  description: String
+
+  type: __Type!
+
+  """
+  A GraphQL-formatted string representing the default value for this input value.
+  """
+  defaultValue: String
+}
+
+"""
+One possible value for a given Enum. Enum values are unique values, not a placeholder for a string or numeric value. However an Enum value is returned in a JSON response as a string.
+"""
+type __EnumValue {
+  name: String!
+
+  description: String
+
+  isDeprecated: Boolean!
+
+  deprecationReason: String
+}
+
+"""
+A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.
+
+In some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.
+"""
+type __Directive {
+  name: String!
+
+  description: String
+
+  locations: [__DirectiveLocation!]!
+
+  args: [__InputValue!]!
+}
+
+"""
+A Directive can be adjacent to many parts of the GraphQL language, a __DirectiveLocation describes one such possible adjacencies.
+"""
+enum __DirectiveLocation {
+  """
+  Location adjacent to a query operation.
+  """
+  QUERY
+
+  """
+  Location adjacent to a mutation operation.
+  """
+  MUTATION
+
+  """
+  Location adjacent to a subscription operation.
+  """
+  SUBSCRIPTION
+
+  """
+  Location adjacent to a field.
+  """
+  FIELD
+
+  """
+  Location adjacent to a fragment definition.
+  """
+  FRAGMENT_DEFINITION
+
+  """
+  Location adjacent to a fragment spread.
+  """
+  FRAGMENT_SPREAD
+
+  """
+  Location adjacent to an inline fragment.
+  """
+  INLINE_FRAGMENT
+
+  """
+  Location adjacent to a variable definition.
+  """
+  VARIABLE_DEFINITION
+
+  """
+  Location adjacent to a schema definition.
+  """
+  SCHEMA
+
+  """
+  Location adjacent to a scalar definition.
+  """
+  SCALAR
+
+  """
+  Location adjacent to an object type definition.
+  """
+  OBJECT
+
+  """
+  Location adjacent to a field definition.
+  """
+  FIELD_DEFINITION
+
+  """
+  Location adjacent to an argument definition.
+  """
+  ARGUMENT_DEFINITION
+
+  """
+  Location adjacent to an interface definition.
+  """
+  INTERFACE
+
+  """
+  Location adjacent to a union definition.
+  """
+  UNION
+
+  """
+  Location adjacent to an enum definition.
+  """
+  ENUM
+
+  """
+  Location adjacent to an enum value definition.
+  """
+  ENUM_VALUE
+
+  """
+  Location adjacent to an input object type definition.
+  """
+  INPUT_OBJECT
+
+  """
+  Location adjacent to an input object field definition.
+  """
+  INPUT_FIELD_DEFINITION
+}
+
+"""
+A time string at UTC, such as 10:15:30Z, compliant with the `full-time` format outlined in section 5.6 of the RFC 3339profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar Time
+
+enum CacheControlScope {
+  PUBLIC
+
+  PRIVATE
+}
+
+type JittaLineValue {
+  month: String
+
+  value: Float
+}
+
+type DefaultScopeItem implements ScopeItem {
+  id: ID
+
+  year: Int
+
+  month: Int
+
+  quarter: Int
+
+  day: Int
+
+  value: Float
+}
+
+type SignRawIPO implements SignRaw {
+  name: String
+
+  value: Int
+}
+
+type SignRawValues implements SignRaw {
+  name: String
+
+  values: [ScopeItem]
+}
+
+enum NotificationType {
+  FINANCIAL_UPDATE
+
+  BROADCAST
+}
+
+type BroadcastNotification implements NotificationInterface {
+  id: String!
+
+  title: String!
+
+  message: String!
+
+  read: Boolean
+
+  createdAt: DateTime
+}
+
+type FinancialUpdateNotification implements NotificationInterface {
+  id: String!
+
+  title: String!
+
+  message: String!
+
+  read: Boolean
+
+  createdAt: DateTime
+
+  previousScore: String
+
+  currentScore: String
+
+  financialUpdated: String
+
+  stock: Stock
+}
+
+type MockupStock {
+  alias: String
+
+  name: String
+
+  symbol: String
+
+  stockId: Int
+
+  price: Price
+}
+
+enum PageType {
+  STOCK_THEME
+}
+
+type StockThemePage implements PageInterface {
+  id: String!
+
+  title: String!
+
+  subTitle: String
+
+  text: String
+
+  url: String
+
+  deepLinkUrl: String
+
+  coverImage: String
+
+  stocks: [Stock]
+}
+
+type ChoiceNextQuestion {
+  id: Int!
+
+  nextQuestionId: Int!
+}
+
+type InvestingMixPathItem {
+  id: Int!
+
+  previousQuestionId: Int
+
+  choiceNextQuestionId: [ChoiceNextQuestion]
+}
+
+directive @cacheControl (maxAge: Int, scope: CacheControlScope) on OBJECT|FIELD_DEFINITION
+
+directive @hasRole (roles: [String]) on FIELD|FIELD_DEFINITION
+
+"""
+Directs the executor to skip this field or fragment when the `if` argument is true.
+"""
+directive @skip ("Skipped when true." if: Boolean!) on FIELD|FRAGMENT_SPREAD|INLINE_FRAGMENT
+
+"""
+Directs the executor to include this field or fragment only when the `if` argument is true.
+"""
+directive @include ("Included when true." if: Boolean!) on FIELD|FRAGMENT_SPREAD|INLINE_FRAGMENT
+
+"""
+Marks an element of a GraphQL schema as no longer supported.
+"""
+directive @deprecated ("Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted using the Markdown syntax (as specified by [CommonMark](https:\/\/commonmark.org\/)." reason: String = "No longer supported") on FIELD_DEFINITION|ENUM_VALUE
+
+schema {
+  query: Query
+  mutation: Mutation
+}
