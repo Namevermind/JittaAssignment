@@ -1,0 +1,67 @@
+query stockSummaryQuery($id: String) {
+    stock(id: $id) {
+        title
+        id
+        comparison {
+            market {
+                rank
+                member
+            }
+        }
+        jitta {
+            score {
+                last {
+                    value
+                }
+            }
+            factor {
+                last {
+                    value {
+                        recent {
+                            name
+                            level
+                            value
+                        }
+                        growth {
+                            name
+                            level
+                            value
+                        }
+                        financial {
+                            name
+                            level
+                            value
+                        }
+                        return {
+                            name
+                            level
+                            value
+                        }
+                        management {
+                            name
+                            level
+                            value
+                        }
+                    }
+                }
+            }
+            sign {
+                last {
+                    title
+                    type
+                    value
+                }
+            }
+        }
+        summary
+        sector {
+            name
+        }
+        industry
+        company {
+            link {
+                url
+            }
+        }
+    }
+}

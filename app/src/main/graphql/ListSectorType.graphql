@@ -1,0 +1,6 @@
+query ListSectorType {
+    listJittaSectorType {
+        id
+        name
+    }
+}
