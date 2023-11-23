@@ -43,6 +43,17 @@ data class Detail(
     data class Sign(
         val title: String?,
         val type: String?,
-        val value: String?
-    )
+        val value: String?,
+        val display: Display
+    ) {
+        data class Display(
+            val columnHead: List<String>?,
+            val columns: List<Columns>?
+        )
+
+        data class Columns(
+            val name: String?,
+            val data: List<String>?
+        )
+    }
 }

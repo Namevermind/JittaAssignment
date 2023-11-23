@@ -74,6 +74,17 @@ query stockSummaryQuery($id: String!) {
                     title
                     type
                     value
+                    display {
+                        __typename
+                        ... on DisplayTable {
+                            columnHead
+                            columns {
+                                name
+                                data
+                            }
+                            footer
+                        }
+                    }
                 }
             }
         }

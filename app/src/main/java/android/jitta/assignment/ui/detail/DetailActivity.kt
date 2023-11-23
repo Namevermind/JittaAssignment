@@ -21,7 +21,7 @@ class DetailActivity : DataBindingActivity<ActivityDetailBinding, DetailViewMode
         intent.getStringExtra(ARGS_ITEM_ID_KEY).orEmpty()
     }
 
-    private val signAdapter by lazy { SignsAdapter(::onComingSoonToast) }
+    private val signAdapter by lazy { SignsAdapter() }
 
     private val factorsAdapter by lazy { FactorsAdapter() }
 

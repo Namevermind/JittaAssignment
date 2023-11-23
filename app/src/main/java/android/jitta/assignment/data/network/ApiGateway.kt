@@ -115,6 +115,7 @@ class ApiGatewayImpl(
             )
         }
 
+
         return ApiResponse.Success(
             Detail(
                 title = result?.title,
@@ -127,7 +128,24 @@ class ApiGatewayImpl(
                 currentPrice = result?.price?.latest?.close,
                 diff = diff,
                 factor = factor,
-                sign = jitta?.sign?.last?.map { Sign(it?.title, it?.type, it?.value) },
+                sign = jitta?.sign?.last?.filter { it?.display?.__typename == "DisplayTable" }
+                    ?.map { sign ->
+                        val display = sign?.display?.onDisplayTable
+                        Sign(
+                            title = sign?.title,
+                            type = sign?.type,
+                            value = sign?.value,
+                            display = Sign.Display(
+                                columnHead = display?.columnHead?.map { it.orEmpty() },
+                                columns = display?.columns?.map {
+                                    Sign.Columns(
+                                        name = it?.name,
+                                        data = it?.data?.map { data -> data.orEmpty() }
+                                    )
+                                }
+                            )
+                        )
+                    },
                 description = result?.summary,
                 sectorName = result?.sector?.name,
                 industry = result?.industry,

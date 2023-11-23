@@ -30,7 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!-- View State : Loading Init -->
+           <!-- &lt;!&ndash; View State : Loading Init &ndash;&gt;
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical" />
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>-->
 
             <!-- View State : Normal -->
 
@@ -58,8 +58,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="16dp">
+                        android:layout_height="wrap_content">
 
                         <LinearLayout
                             android:id="@+id/layout_score"
@@ -67,6 +66,7 @@
                             android:layout_height="wrap_content"
                             android:background="@color/primary"
                             android:gravity="center"
+                            android:layout_marginEnd="16dp"
                             android:orientation="vertical"
                             android:padding="6dp"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -95,6 +95,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:ellipsize="end"
+                            android:layout_marginStart="16dp"
                             android:maxLines="1"
                             android:text="@{vm.titleLabel}"
                             android:textSize="24sp"
@@ -110,7 +111,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="@{vm.idLabel}"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/tv_title"
                             app:layout_constraintTop_toBottomOf="@+id/tv_title"
                             tools:text="ID:ID" />
 
@@ -121,7 +122,7 @@
                             android:layout_marginTop="4dp"
                             android:text="@{vm.rankingDetailLabel}"
                             android:textSize="13sp"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/tv_id"
                             app:layout_constraintTop_toBottomOf="@+id/tv_id"
                             tools:text="Jitta Ranking #0 from 000" />
 
@@ -136,7 +137,7 @@
                             android:text="Follow"
                             android:textColor="@color/white"
                             android:textSize="16sp"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/tv_ranking_label"
                             app:layout_constraintTop_toBottomOf="@+id/tv_ranking_label" />
 
                         <TextView
@@ -146,7 +147,7 @@
                             android:layout_marginTop="16dp"
                             android:text="@{vm.currentDateLabel}"
                             android:textSize="13sp"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/btn_follow"
                             app:layout_constraintTop_toBottomOf="@+id/btn_follow"
                             tools:text="Price (00 Aaa 0000)" />
 
@@ -158,7 +159,7 @@
                             android:text="@{vm.currentPrice}"
                             android:textSize="22sp"
                             android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/btn_follow"
                             app:layout_constraintTop_toBottomOf="@+id/tv_current_date_label"
                             tools:text="฿0.00" />
 
@@ -169,7 +170,7 @@
                             android:layout_marginTop="16dp"
                             android:text="@{vm.valueDiffLabel}"
                             android:textSize="13sp"
-                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/layout_score"
                             app:layout_constraintTop_toBottomOf="@+id/btn_follow"
                             tools:text="Under Jitta Line"
                             tools:textColor="@color/text_green" />
@@ -182,20 +183,20 @@
                             android:text="@{vm.percentageDiffLabel}"
                             android:textSize="22sp"
                             android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/layout_score"
                             app:layout_constraintTop_toBottomOf="@+id/tv_value_diff_label"
                             tools:text="00.00%"
                             tools:textColor="@color/text_green" />
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:id="@+id/layout_graph"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="220dp"
                             android:layout_marginTop="26dp"
                             android:background="@color/text_placeholder"
                             android:gravity="center"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/tv_percentage_label"
+                            app:layout_constraintStart_toStartOf="@+id/tv_current_price_label"
                             app:layout_constraintTop_toBottomOf="@+id/tv_current_price_label">
 
                             <TextView
@@ -208,12 +209,12 @@
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:id="@+id/layout_factors"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="32dp"
                             android:orientation="vertical"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/layout_graph"
+                            app:layout_constraintStart_toStartOf="@+id/layout_graph"
                             app:layout_constraintTop_toBottomOf="@+id/layout_graph">
 
                             <TextView
@@ -250,6 +251,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Jitta Signs"
                                 android:textSize="18sp"
+                                android:layout_marginStart="16dp"
                                 android:textStyle="bold"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_value_diff_label" />
@@ -269,6 +271,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="32dp"
+                            android:layout_marginHorizontal="16dp"
                             android:orientation="vertical"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -331,6 +334,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="32dp"
                             android:orientation="vertical"
+                            android:layout_marginHorizontal="16dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/layout_description">
@@ -417,6 +421,7 @@
                                 android:id="@+id/layout_website_link"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
                                 android:background="?attr/selectableItemBackground"
                                 android:clickable="true"
                                 android:focusable="true"
