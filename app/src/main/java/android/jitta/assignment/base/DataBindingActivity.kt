@@ -14,6 +14,8 @@ abstract class DataBindingActivity<Binding : ViewDataBinding, VM : ViewModel> : 
 
     protected abstract fun getLayoutResId(): Int
 
+    protected abstract fun onViewCreated()
+
     protected abstract fun onCreateViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +26,5 @@ abstract class DataBindingActivity<Binding : ViewDataBinding, VM : ViewModel> : 
         onViewCreated()
         onCreateViewModel()
     }
-
-    abstract fun onViewCreated()
 
 }

@@ -23,9 +23,12 @@ class NormalViewHolder(
         val rank = itemView.findViewById<TextView>(R.id.tv_rank_label)
         val count = itemView.findViewById<TextView>(R.id.tv_count_label)
 
-        title.text = item.title
-        id.text = item.id
-        rank.text = item.rank.toString()
-        count.text = "/${item.count}"
+        title.text = item.title.orEmpty()
+        id.text = item.id.orEmpty()
+        rank.text = "${item.rank ?: 0}"
+        count.text = buildString {
+            append("/")
+            append(item.count ?: 0)
+        }
     }
 }
