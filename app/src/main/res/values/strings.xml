@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">JittaAssignment</string>
     <string name="title_activity_main">Jitta Ranking</string>
-    <string name="description_activity_main">จัดอันดับหุ้นดีราคาถูก ที่น่าลงทุนระยะยาว</string>
+    <string name="description_activity_main">Discover today\'s top value stocks.</string>
 
 </resources>

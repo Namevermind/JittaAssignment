@@ -13,7 +13,6 @@ class RankingAdapter(
     private val onSelectedItem: (selectItemId: String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var isHasMoreItems = false
     private var itemList = listOf<RankingItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -45,15 +44,11 @@ class RankingAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (isHasMoreItems) {
-            itemList.size + 1
-        } else {
-            itemList.size
-        }
+        return itemList.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (isHasMoreItems && position == itemList.size) {
+        return if (itemList[position].id.isNullOrEmpty()) {
             ViewType.TYPE_LOADING
         } else {
             ViewType.TYPE_NORMAL
@@ -61,17 +56,22 @@ class RankingAdapter(
     }
 
     fun setItem(itemList: List<RankingItem>, isHasMoreItems: Boolean) {
-        this.isHasMoreItems = isHasMoreItems
+        val newItems = mutableListOf<RankingItem>()
+        newItems.addAll(itemList)
+        if (isHasMoreItems && itemList.isNotEmpty()) {
+            newItems.add(RankingItem.emptyItem)
+        }
         val oldItem = this.itemList
-        this.itemList = itemList
+        this.itemList = newItems
 
-        DiffUtil.calculateDiff(ItemRankingDiffCallback(oldItem, itemList))
+        DiffUtil.calculateDiff(ItemRankingDiffCallback(oldItem, newItems))
             .dispatchUpdatesTo(this)
     }
 
     private fun onSelectedItem(position: Int) {
-        val selectItemId = itemList[position].id
-        onSelectedItem.invoke(selectItemId)
+        itemList[position].id?.let {
+            onSelectedItem.invoke(it)
+        }
     }
 
     object ViewType {

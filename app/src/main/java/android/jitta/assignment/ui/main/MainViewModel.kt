@@ -21,6 +21,7 @@ class MainViewModel(
 
     var isHasMoreRankingItem = true
     var currentMarketType = "TH"
+    var currentSectorId = ""
     private var currentPage = 0
 
     val countryList = MutableLiveData<List<Country>>()
@@ -40,12 +41,21 @@ class MainViewModel(
 
             // setup init value
             countryList.value?.find { it.code == "TH" }?.also {
-                marketTypeDisplay.value = it.name
-                currentMarketType = it.code
+                marketTypeDisplay.value = it.name.orEmpty()
+                currentMarketType = it.code.orEmpty()
             }
-            sectorTypeDisplay.value = "All"
 
-            val newRankingItems = getRankingList(marketId = currentMarketType, page = currentPage)
+            sectorList.value?.firstOrNull()?.also {
+                sectorTypeDisplay.value = it.name.orEmpty()
+                currentSectorId = it.id.orEmpty()
+            }
+
+            val newRankingItems =
+                getRankingList(
+                    marketId = currentMarketType,
+                    sectorId = currentSectorId,
+                    page = currentPage
+                )
             updateRankList(newRankingItems)
 
             onLoadingInitSuccess.call()
@@ -64,15 +74,26 @@ class MainViewModel(
     private suspend fun getSectorTypeList(): List<Sector> {
         return getSectorListUseCase().let { response ->
             when (response) {
-                is ApiResponse.Success -> response.data
+                is ApiResponse.Success -> {
+                    val newList = mutableListOf<Sector>()
+                    newList.add(Sector("", "All sector")) // Add All sector
+                    newList.addAll(response.data)
+                    return newList
+                }
+
                 is ApiResponse.Failure -> emptyList()
             }
         }
     }
 
-    private suspend fun getRankingList(marketId: String, page: Int): List<RankingItem> {
+    private suspend fun getRankingList(
+        marketId: String,
+        sectorId: String,
+        page: Int
+    ): List<RankingItem> {
         val params = GetRankingListUseCase.Params(
             market = marketId,
+            sectorId = sectorId,
             page = page
         )
         getRankingListUseCase.invoke(params)
@@ -87,18 +108,28 @@ class MainViewModel(
     fun loadMoreRankingList() {
         currentPage++
         viewModelScope.launch {
-            val newRankingItems = getRankingList(marketId = currentMarketType, page = currentPage)
+            val newRankingItems = getRankingList(
+                marketId = currentMarketType,
+                sectorId = currentSectorId,
+                page = currentPage
+            )
             updateRankList(newRankingItems)
         }
     }
 
-    fun changeMarketRankingList(marketCode: String) {
+    fun changeMarketRankingList(marketCode: String, sectorId: String) {
         currentMarketType = marketCode
+        currentSectorId = sectorId
         marketTypeDisplay.value = countryList.value?.find { it.code == marketCode }?.name.orEmpty()
+        sectorTypeDisplay.value = sectorList.value?.find { it.id == sectorId }?.name.orEmpty()
 
         viewModelScope.launch {
             resetPage()
-            val newRankingItems = getRankingList(marketId = currentMarketType, page = currentPage)
+            val newRankingItems = getRankingList(
+                marketId = currentMarketType,
+                sectorId = currentSectorId,
+                page = currentPage
+            )
             updateRankList(newRankingItems)
         }
 

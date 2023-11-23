@@ -1,4 +1,4 @@
-query stockSummaryQuery($id: String) {
+query stockSummaryQuery($id: String!) {
     stock(id: $id) {
         title
         id
@@ -8,10 +8,34 @@ query stockSummaryQuery($id: String) {
                 member
             }
         }
+        price {
+            latest {
+                close
+                datetime
+            }
+        }
         jitta {
             score {
                 last {
                     value
+                }
+            }
+            priceDiff {
+                last {
+                    id
+                    value
+                    ... on PriceDiffItem {
+                        type
+                        percent
+                    }
+                }
+                values(filterBy: { limit: 132, sort: DESC }) {
+                    id
+                    value
+                    ... on PriceDiffItem {
+                        type
+                        percent
+                    }
                 }
             }
             factor {
@@ -50,6 +74,17 @@ query stockSummaryQuery($id: String) {
                     title
                     type
                     value
+                    display {
+                        __typename
+                        ... on DisplayTable {
+                            columnHead
+                            columns {
+                                name
+                                data
+                            }
+                            footer
+                        }
+                    }
                 }
             }
         }
@@ -63,5 +98,6 @@ query stockSummaryQuery($id: String) {
                 url
             }
         }
+        currency_sign
     }
 }

@@ -3,8 +3,14 @@
     <color name="primary">#59D1F9</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#AFB2B8</color>
+    <color name="green">#15B398</color>
+    <color name="red">#FE736C</color>
+    <color name="gray_sky">#F1F5F9</color>
 
     <color name="color_divider">#195A6E7B</color>
 
     <color name="text_placeholder">#999999</color>
+    <color name="text_green">@color/green</color>
+    <color name="text_red">@color/red</color>
 </resources>

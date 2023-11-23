@@ -4,10 +4,13 @@ import android.graphics.Color
 import android.jitta.assignment.R
 import android.jitta.assignment.base.DataBindingActivity
 import android.jitta.assignment.data.entities.Country
+import android.jitta.assignment.data.entities.Sector
 import android.jitta.assignment.databinding.ActivityMainBinding
 import android.jitta.assignment.ui.detail.DetailActivity
 import android.jitta.assignment.ui.main.adapter.RankingAdapter
 import android.jitta.assignment.ui.main.marketContent.MarketDialogFragment
+import android.jitta.assignment.ui.main.sectorContent.SectorDialogFragment
+import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
@@ -40,20 +43,33 @@ class MainActivity : DataBindingActivity<ActivityMainBinding, MainViewModel>(),
                 currentItemId = vm.currentMarketType
             )
         }
+
+        binding.btnSectorFilter.setOnClickListener {
+            openDialogSectorFilter(
+                itemList = vm.sectorList.value.orEmpty(),
+                currentItemId = vm.currentSectorId
+            )
+        }
+
+        binding.swiperefresh.setOnRefreshListener {
+            vm.changeMarketRankingList(vm.currentMarketType, vm.currentSectorId)
+        }
     }
 
     override fun onCreateViewModel() {
         binding.vm = vm
 
         vm.onLoadingInitSuccess.observe(this) {
-//            binding.vfContainer.displayedChild = 1
+            binding.vfContainer.displayedChild = 1
         }
 
         vm.rankingList.observe(this) { rankingList ->
+
             val isNewState = adapter.itemCount <= 1
             adapter.setItem(rankingList, vm.isHasMoreRankingItem)
 
             if (isNewState) {
+                binding.swiperefresh.isRefreshing = false
                 binding.rvRanking.scrollToPosition(0)
             }
         }
@@ -97,12 +113,34 @@ class MainActivity : DataBindingActivity<ActivityMainBinding, MainViewModel>(),
         marketDialogFragment.show(supportFragmentManager, MarketDialogFragment.TAG)
     }
 
+    private fun openDialogSectorFilter(
+        itemList: List<Sector>,
+        currentItemId: String,
+    ) {
+        val sectorDialogFragment = SectorDialogFragment(
+            itemList = itemList,
+            currentItemId = currentItemId,
+            onSectorSelected = ::onSectorChange
+        )
+        sectorDialogFragment.show(supportFragmentManager, SectorDialogFragment.TAG)
+    }
+
     private fun onMarketCountryChange(marketCode: String) {
-        vm.changeMarketRankingList(marketCode)
+        vm.changeMarketRankingList(
+            marketCode,
+            vm.sectorList.value?.firstOrNull()?.id ?: vm.currentSectorId
+        )
+    }
+
+    private fun onSectorChange(sectorId: String) {
+        vm.changeMarketRankingList(vm.currentMarketType, sectorId)
     }
 
     private fun onSelectedItem(itemId: String) {
-        DetailActivity.launch(context = this)
+        val bundle = Bundle().apply {
+            putString(DetailActivity.ARGS_ITEM_ID_KEY, itemId)
+        }
+        DetailActivity.launch(context = this, bundle = bundle)
     }
 
 }

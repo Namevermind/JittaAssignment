@@ -1,24 +1,24 @@
-package android.jitta.assignment.ui.main.marketContent.adapter
+package android.jitta.assignment.ui.main.sectorContent.adapter
 
 import android.graphics.Typeface
 import android.jitta.assignment.R
-import android.jitta.assignment.data.entities.Country
+import android.jitta.assignment.data.entities.Sector
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MarketAdapter(
-    private val onMarketSelected: (marketCode: String) -> Unit
-) : RecyclerView.Adapter<MarketAdapter.ViewHolder>() {
+class SectorAdapter(
+    private val onSectorSelected: (sectorId: String) -> Unit
+) : RecyclerView.Adapter<SectorAdapter.ViewHolder>() {
 
-    private var itemList = listOf<Country>()
+    private var itemList = listOf<Sector>()
     private var currentItemId = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.layout_market_item_view, parent, false)
+            .inflate(R.layout.layout_sector_item_view, parent, false)
         return ViewHolder(view, ::onSelectedMarketItem)
     }
 
@@ -32,12 +32,12 @@ class MarketAdapter(
     override fun getItemCount() = itemList.size
 
     private fun onSelectedMarketItem(position: Int) {
-        itemList[position].code?.let {
-            onMarketSelected.invoke(it)
+        itemList[position].id?.let {
+            onSectorSelected.invoke(it)
         }
     }
 
-    fun setItem(itemList: List<Country>, currentItemId: String) {
+    fun setItem(itemList: List<Sector>, currentItemId: String) {
         this.currentItemId = currentItemId
         this.itemList = itemList
         notifyDataSetChanged()
@@ -47,28 +47,22 @@ class MarketAdapter(
         view: View,
         private val onSelectedItem: (position: Int) -> Unit
     ) : RecyclerView.ViewHolder(view) {
-
         init {
             itemView.setOnClickListener {
                 onSelectedItem.invoke(adapterPosition)
             }
         }
 
-        fun bind(item: Country, currentItemId: String) {
-            val flag = itemView.findViewById<TextView>(R.id.tv_flag_label)
+        fun bind(item: Sector, currentItemId: String) {
             val label = itemView.findViewById<TextView>(R.id.tv_title_label)
-
-            flag.text = item.flag
             label.text = item.name
-
             label.setTypeface(
                 label.typeface,
-                when (item.code) {
+                when (item.id) {
                     currentItemId -> Typeface.BOLD
                     else -> Typeface.NORMAL
                 }
             )
         }
-
     }
 }

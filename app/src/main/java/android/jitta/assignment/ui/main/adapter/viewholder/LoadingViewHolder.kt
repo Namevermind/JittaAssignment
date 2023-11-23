@@ -5,7 +5,4 @@ import androidx.recyclerview.widget.RecyclerView
 
 class LoadingViewHolder(
     view: View,
-) : RecyclerView.ViewHolder(view) {
-
-    fun bind() {}
-}
+) : RecyclerView.ViewHolder(view) 
