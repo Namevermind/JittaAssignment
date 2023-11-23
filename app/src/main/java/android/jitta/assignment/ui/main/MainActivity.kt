@@ -11,9 +11,11 @@ import android.jitta.assignment.ui.main.adapter.RankingAdapter
 import android.jitta.assignment.ui.main.marketContent.MarketDialogFragment
 import android.jitta.assignment.ui.main.sectorContent.SectorDialogFragment
 import android.os.Bundle
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : DataBindingActivity<ActivityMainBinding, MainViewModel>(),
@@ -52,7 +54,10 @@ class MainActivity : DataBindingActivity<ActivityMainBinding, MainViewModel>(),
         }
 
         binding.swiperefresh.setOnRefreshListener {
-            vm.changeMarketRankingList(vm.currentMarketType, vm.currentSectorId)
+            vm.viewModelScope.launch {
+                vm.refresh()
+                binding.rvRanking.scrollToPosition(0)
+            }
         }
     }
 
@@ -64,12 +69,11 @@ class MainActivity : DataBindingActivity<ActivityMainBinding, MainViewModel>(),
         }
 
         vm.rankingList.observe(this) { rankingList ->
-
+            binding.swiperefresh.isRefreshing = false
             val isNewState = adapter.itemCount <= 1
             adapter.setItem(rankingList, vm.isHasMoreRankingItem)
 
             if (isNewState) {
-                binding.swiperefresh.isRefreshing = false
                 binding.rvRanking.scrollToPosition(0)
             }
         }

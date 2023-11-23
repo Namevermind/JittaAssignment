@@ -117,6 +117,17 @@ class MainViewModel(
         }
     }
 
+    suspend fun refresh() {
+        resetPage()
+        val newRankingItems = getRankingList(
+            marketId = currentMarketType,
+            sectorId = currentSectorId,
+            page = currentPage
+        )
+        isHasMoreRankingItem = newRankingItems.size >= 30
+        rankingList.value = newRankingItems
+    }
+
     fun changeMarketRankingList(marketCode: String, sectorId: String) {
         currentMarketType = marketCode
         currentSectorId = sectorId
@@ -125,6 +136,7 @@ class MainViewModel(
 
         viewModelScope.launch {
             resetPage()
+            rankingList.value = listOf()
             val newRankingItems = getRankingList(
                 marketId = currentMarketType,
                 sectorId = currentSectorId,
@@ -138,7 +150,6 @@ class MainViewModel(
     private fun resetPage() {
         isHasMoreRankingItem = true
         currentPage = 0
-        rankingList.value = listOf()
     }
 
     private fun updateRankList(newRankingItems: List<RankingItem>) {

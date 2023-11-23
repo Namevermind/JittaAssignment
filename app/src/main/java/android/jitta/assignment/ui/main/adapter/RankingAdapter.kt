@@ -58,7 +58,7 @@ class RankingAdapter(
     fun setItem(itemList: List<RankingItem>, isHasMoreItems: Boolean) {
         val newItems = mutableListOf<RankingItem>()
         newItems.addAll(itemList)
-        if (isHasMoreItems && itemList.isNotEmpty()) {
+        if (isHasMoreItems) {
             newItems.add(RankingItem.emptyItem)
         }
         val oldItem = this.itemList
