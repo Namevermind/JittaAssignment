@@ -87,5 +87,6 @@ query stockSummaryQuery($id: String!) {
                 url
             }
         }
+        currency_sign
     }
 }

@@ -123,6 +123,7 @@ class ApiGatewayImpl(
                 member = result?.comparison?.market?.member,
                 score = jitta?.score?.last?.value,
                 currentDate = result?.price?.latest?.datetime.toString(),
+                currencySign = result?.currency_sign,
                 currentPrice = result?.price?.latest?.close,
                 diff = diff,
                 factor = factor,

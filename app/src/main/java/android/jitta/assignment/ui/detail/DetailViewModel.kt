@@ -55,7 +55,7 @@ class DetailViewModel(
                     "Price ($formattedDate)"
                 }.orEmpty()
                 currentPrice.value = buildString {
-                    append("฿")
+                    append(detail.currencySign.orEmpty())
                     append(detail.currentPrice?.let { String.format("%.2f", it) } ?: "0.00")
                 }
                 valueDiffLabel.value = when ((detail.diff?.value ?: 0.00) > 0) {

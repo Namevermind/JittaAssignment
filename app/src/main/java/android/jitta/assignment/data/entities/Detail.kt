@@ -9,6 +9,7 @@ data class Detail(
     val member: Int?,
     val score: Double?,
     val currentDate: String?,
+    val currencySign: String?,
     val currentPrice: Double?,
     val diff: Diff?,
     val factor: Factor?,
