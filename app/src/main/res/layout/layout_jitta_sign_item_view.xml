@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/iv_divider_item"
+        android:layout_width="4dp"
+        android:layout_height="0dp"
+        android:src="@drawable/bg_divider_sign_green"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_value_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_title_label" />
+
+    <TextView
+        android:id="@+id/tv_title_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Title label"
+        app:layout_constraintBottom_toTopOf="@+id/tv_value_label"
+        app:layout_constraintEnd_toStartOf="@+id/iv_more_icon"
+        app:layout_constraintStart_toEndOf="@+id/iv_divider_item"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tv_value_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Value label"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/iv_more_icon"
+        app:layout_constraintStart_toEndOf="@+id/iv_divider_item"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_label" />
+
+    <ImageView
+        android:id="@+id/iv_more_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_expand_more"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/color_divider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_value_label" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

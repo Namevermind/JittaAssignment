@@ -55,6 +55,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
 
     // Apollo Graph QL
     implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
@@ -65,6 +66,7 @@ dependencies {
     // Arch Components
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
     // Koin : Dependency Injection
     implementation("io.insert-koin:koin-android:3.5.0")
     implementation("androidx.databinding:databinding-runtime:8.1.4")
